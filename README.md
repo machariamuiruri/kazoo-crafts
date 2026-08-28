@@ -106,6 +106,54 @@ short of taking card details — this app never touches a card number. To go
 live, create a Stripe Checkout Session in that route and return `session.url`
 for the client to redirect to, which keeps the storefront out of PCI scope.
 
+## Deploying to Vercel
+
+The production build is verified: `next build` succeeds, all product pages
+pre-render, and the app runs correctly under the production CSP (which is
+stricter than dev — it drops `'unsafe-eval'`).
+
+### 1. Push to GitHub
+
+Vercel's git integration is the easiest route. See the repo setup steps at the
+end of this section if `origin` isn't pushed yet.
+
+### 2. Import the project
+
+At [vercel.com/new](https://vercel.com/new), import the repo. Framework preset,
+build command and output directory are all detected automatically — **don't
+override them**.
+
+⚠️ **Set the Node version to 20 or higher** in Project Settings → General.
+Vercel's default may be older, and while this project builds on Node 18
+locally, 20+ is what you want in production.
+
+### 3. Add environment variables
+
+Copy from `.env.example`. At minimum, before accepting real orders:
+
+| Variable | Why |
+| --- | --- |
+| `KV_REST_API_URL` / `KV_REST_API_TOKEN` | **Required.** Without these, rate limiting and callback idempotency silently stop working across serverless instances. Add the Vercel KV / Upstash integration and these are set for you. |
+| `MPESA_CALLBACK_TOKEN` | Generate with `openssl rand -hex 32`. Anyone who learns it can post fake payment confirmations. |
+| `MPESA_CALLBACK_URL` | Must be the full path *including* the token: `https://<domain>/api/mpesa/callback/<token>` |
+| `MPESA_CONSUMER_KEY` / `_SECRET` / `_SHORTCODE` / `_PASSKEY` | From the Daraja portal. Leave blank to keep checkout in simulated mode. |
+
+Set them for **Production** and **Preview** separately — a preview deployment
+pointing at your live paybill will take real money.
+
+### 4. Restrict access while the catalog is fake
+
+Until real products replace the placeholders, turn on **Deployment Protection**
+(Project Settings → Deployment Protection → Vercel Authentication). The site
+currently shows invented product names and invented prices under a real brand
+name — a customer finding it would reasonably assume those are genuine.
+
+### 5. M-PESA note
+
+Daraja *sandbox* is open to anyone. *Production* STK Push requires a registered
+paybill or till and Safaricom approval, which takes time — check what that
+involves before planning a launch around it.
+
 ## Security
 
 ### What is enforced
