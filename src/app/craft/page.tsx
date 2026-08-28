@@ -2,20 +2,22 @@ import type { Metadata } from "next";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { ProductArt } from "@/components/ui/ProductArt";
 import { Button } from "@/components/ui/Button";
+import { Draft } from "@/components/ui/Draft";
+import { WHATSAPP_DEFAULT_MESSAGE, whatsappUrl } from "@/lib/contact";
 
 /*
- * This page is deliberately mostly empty.
+ * Most of this page is gated behind <Draft>.
  *
- * An earlier draft filled it with invented specifics — hide sourcing, stitch
+ * An earlier version filled it with invented specifics — hide sourcing, stitch
  * counts, a lifetime repair guarantee — none of which came from the business.
- * Those are claims only Kazoo Crafts can make, so the page now carries clearly
- * marked placeholders instead. Fill them in; don't restore the invented copy.
+ * Those are claims only Kazoo Crafts can make, so each section now carries the
+ * questions that need answering instead of placeholder prose, and shows
+ * nothing at all to real visitors until they're answered.
  */
 
 export const metadata: Metadata = {
   title: "About",
-  description:
-    "About Kazoo Crafts — handcrafted leather goods made in Kenya.",
+  description: "About Kazoo Crafts — handcrafted leather goods made in Kenya.",
 };
 
 export default function CraftPage() {
@@ -28,17 +30,33 @@ export default function CraftPage() {
             <h1 className="mt-4 text-4xl leading-tight sm:text-5xl">
               Minimal. Timeless. Intentional.
             </h1>
+            {/* Both sentences below come from the brand's own Instagram bio,
+                so they are safe to publish. Everything beyond this is gated. */}
             <p className="text-ink-70 mt-6 leading-relaxed">
               Kazoo Crafts makes handcrafted leather goods in Kenya — footwear,
               baby shoes, bags and small leather pieces, made to order.
             </p>
-            <p className="text-ink-50 mt-6 leading-relaxed italic">
-              PLACEHOLDER — this is where the real story goes: who started the
-              workshop and when, where you work, who makes the pieces, and what
-              you want customers to understand about how you build them. Write
-              it in your own words; nothing here should be invented on your
-              behalf.
-            </p>
+
+            <div className="mt-8">
+              <Draft needs="aboutStory" label="Founder story / workshop">
+                <p className="text-ink-50 text-sm leading-relaxed">
+                  This is where the real story goes, in your own words.
+                </p>
+              </Draft>
+            </div>
+
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Button href="/shop" size="lg">
+                Shop the collection
+              </Button>
+              <Button
+                href={whatsappUrl(WHATSAPP_DEFAULT_MESSAGE)}
+                size="lg"
+                variant="outline"
+              >
+                Ask us anything
+              </Button>
+            </div>
           </div>
           <div className="bg-sand overflow-hidden rounded-sm">
             <ProductArt finishHex="#6B3A19" name="Kazoo Crafts" size="hero" />
@@ -46,36 +64,35 @@ export default function CraftPage() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
-        <SectionHeading
-          eyebrow="What we stand for"
-          title="Three things to fill in"
-          blurb="Replace each of these with something true about how you work — materials, construction, or the standard you hold yourself to."
-          align="center"
-        />
-        <div className="mt-12 grid gap-10 md:grid-cols-3">
-          {["Principle one", "Principle two", "Principle three"].map(
-            (title) => (
-              <div key={title}>
-                <div className="bg-gold mb-5 h-px w-12" />
-                <h3 className="text-xl">{title}</h3>
-                <p className="text-ink-50 mt-3 leading-relaxed italic">
-                  Placeholder — replace with a claim you can stand behind.
-                </p>
-              </div>
-            ),
-          )}
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="space-y-6 py-16">
+          <Draft needs="aboutPrinciples" label="“What we stand for” — 3 principles">
+            <div className="grid gap-10 md:grid-cols-3">
+              {["Principle one", "Principle two", "Principle three"].map(
+                (title) => (
+                  <div key={title}>
+                    <div className="bg-gold mb-5 h-px w-12" />
+                    <h3 className="text-xl">{title}</h3>
+                  </div>
+                ),
+              )}
+            </div>
+          </Draft>
+
+          <Draft needs="careAndRepair" label="Care, repair and returns policy">
+            <div>
+              <SectionHeading title="Care and repair" />
+            </div>
+          </Draft>
         </div>
-      </section>
+      </div>
 
       <section className="bg-surface border-sand border-y">
         <div className="mx-auto max-w-3xl px-4 py-20 text-center sm:px-6">
-          <h2 className="text-3xl">Care and repair</h2>
-          <p className="text-ink-50 mt-5 leading-relaxed italic">
-            PLACEHOLDER — set out your actual care guidance and whether you
-            offer repairs, and on what terms. An earlier draft promised
-            open-ended lifetime repairs; that was invented, and it is a
-            commitment only you can decide to make.
+          <h2 className="text-3xl">Made to order</h2>
+          <p className="text-ink-70 mt-5 leading-relaxed">
+            Every piece is made after you order it, so nothing is sitting in a
+            warehouse. Lead times are shown on each product page.
           </p>
           <Button href="/shop" size="lg" className="mt-8">
             Shop the collection

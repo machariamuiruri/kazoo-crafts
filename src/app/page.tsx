@@ -4,6 +4,12 @@ import { ProductCard } from "@/components/product/ProductCard";
 import { ProductArt } from "@/components/ui/ProductArt";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Button } from "@/components/ui/Button";
+import { Draft } from "@/components/ui/Draft";
+import { INSTAGRAM_HANDLE, whatsappUrl } from "@/lib/contact";
+
+/** Opening message for the corporate "Request a quote" CTA. */
+const CORPORATE_WHATSAPP_MESSAGE =
+  "Hi Kazoo Crafts! 👋 I'd like a quote for corporate gifting — branded leather pieces for my team or clients.";
 
 /*
  * Copy note.
@@ -82,14 +88,23 @@ function Hero() {
             <div className="bg-sand min-w-0 overflow-hidden rounded-sm">
               <ProductArt finishHex="#B87333" name="Leather Sandal" />
             </div>
-            <div className="bg-ink text-cream flex min-w-0 flex-col justify-center rounded-sm p-6">
-              <p className="font-serif text-2xl leading-snug break-words">
-                Minimal. Timeless. Intentional.
+            {/* This tile used to repeat "Minimal. Timeless. Intentional."
+                verbatim from the <h1> a few hundred pixels above it — a
+                duplicate render, not a stamp treatment. Now points at
+                Instagram, where the real product photography lives. */}
+            <a
+              href={`https://instagram.com/${INSTAGRAM_HANDLE}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-ink text-cream hover:bg-leather flex min-w-0 flex-col justify-center rounded-sm p-6 transition-colors"
+            >
+              <p className="font-serif text-xl leading-snug break-words">
+                @{INSTAGRAM_HANDLE}
               </p>
               <p className="text-cream/60 mt-3 text-xs tracking-wide uppercase">
-                @26_kazoocraft.ke
+                See our work on Instagram
               </p>
-            </div>
+            </a>
           </div>
         </div>
       </div>
@@ -157,27 +172,20 @@ function Featured() {
 function CraftStory() {
   return (
     <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
-      <SectionHeading
-        eyebrow="Our craft"
-        title="How each pair is made"
-        blurb="PLACEHOLDER — describe your actual process here. The three steps below are empty scaffolding, not claims about how you work."
-        align="center"
-      />
-      <ol className="mt-14 grid gap-10 md:grid-cols-3">
-        {[
-          { step: "01", title: "Step one" },
-          { step: "02", title: "Step two" },
-          { step: "03", title: "Step three" },
-        ].map((item) => (
-          <li key={item.step}>
-            <span className="font-serif text-gold text-4xl">{item.step}</span>
-            <h3 className="mt-3 text-xl">{item.title}</h3>
-            <p className="text-ink-50 mt-3 leading-relaxed italic">
-              Placeholder — replace with a real description of this stage.
-            </p>
-          </li>
-        ))}
-      </ol>
+      <Draft needs="processSteps" label="“How each pair is made” — process steps">
+        <SectionHeading
+          eyebrow="Our craft"
+          title="How each pair is made"
+          align="center"
+        />
+        <ol className="mt-10 grid gap-10 md:grid-cols-3">
+          {["01", "02", "03"].map((step) => (
+            <li key={step}>
+              <span className="font-serif text-gold text-4xl">{step}</span>
+            </li>
+          ))}
+        </ol>
+      </Draft>
     </section>
   );
 }
@@ -191,23 +199,33 @@ function CorporateBand() {
           <h2 className="text-cream mt-4 text-3xl sm:text-4xl">
             Leather gifts for teams and clients
           </h2>
+          {/* States only what's confirmed: the product types, and the MOQs
+              Frank verified (Folio 25, Tag Set 50). Branding method and lead
+              times are still outstanding — see the Draft block below. */}
           <p className="text-cream/70 mt-5 max-w-xl leading-relaxed">
-            Folios and tag sets in leather, carrying your branding. PLACEHOLDER
-            — confirm the branding method, minimum order quantities and lead
-            times before publishing this section.
+            Leather folios and tag sets for teams, clients and conferences,
+            carrying your branding. Minimum order from 25 pieces.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Button href="/shop?category=corporate" size="lg" variant="accent">
               See gifting range
             </Button>
             <Button
-              href="https://instagram.com/26_kazoocraft.ke"
+              href={whatsappUrl(CORPORATE_WHATSAPP_MESSAGE)}
               size="lg"
               variant="outline"
               className="border-cream/30 text-cream hover:border-cream hover:bg-cream/10"
             >
-              Enquire on Instagram
+              Request a quote
             </Button>
+          </div>
+
+          <div className="mt-8">
+            <Draft needs="corporateTerms" label="Corporate gifting terms">
+              <p className="text-ink-70 text-sm">
+                Branding method, lead time, setup costs and packaging.
+              </p>
+            </Draft>
           </div>
         </div>
         <div className="bg-cream/5 overflow-hidden rounded-sm">

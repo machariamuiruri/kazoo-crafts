@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { Product } from "@/lib/products";
-import { ProductArt } from "@/components/ui/ProductArt";
+import { ProductImage } from "@/components/product/ProductImage";
 import { Price } from "@/components/ui/Price";
 
 export function ProductCard({ product }: { product: Product }) {
@@ -10,9 +10,9 @@ export function ProductCard({ product }: { product: Product }) {
   return (
     <Link href={`/shop/${product.slug}`} className="group block">
       <div className="relative overflow-hidden rounded-sm bg-sand">
-        <ProductArt
+        <ProductImage
+          product={product}
           finishHex={product.finishes[0].hex}
-          name={product.name}
           className="transition-transform duration-700 ease-[var(--ease-craft)] group-hover:scale-[1.04]"
         />
         {onSale && (

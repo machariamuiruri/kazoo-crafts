@@ -76,6 +76,46 @@ utilities — `--color-leather` gives you `bg-leather`, `text-leather`,
 
 Add a colour there rather than dropping an arbitrary hex into a component.
 
+## Unfinished content (draft gating)
+
+Sections still waiting on real facts are wrapped in `<Draft>`
+(`src/components/ui/Draft.tsx`). **Real visitors see nothing** — the gating
+happens at render time, so unfinished markup never reaches the browser at all,
+rather than being hidden with CSS where it'd sit readable in the page source.
+
+To review what's outstanding:
+
+```bash
+npm run dev                              # draft content visible by default
+# or on a Vercel preview:
+NEXT_PUBLIC_SHOW_DRAFT_CONTENT=1
+```
+
+Each gated section renders behind a banner listing the exact questions to
+answer. Those live in `CONTENT_NEEDED` in `src/lib/draft.ts`, deliberately
+phrased as **questions rather than draft prose** — suggested wording tends to
+get approved on sight, which is how an invented "lifetime repairs" promise
+reached an earlier version of this site and had to be pulled.
+
+Currently gated: About story, the three principles, care/repair policy,
+homepage process steps, corporate gifting terms, footer address/hours, product
+specifications, and the EU size → cm conversion table.
+
+**Confirmed and published:** corporate MOQs (Executive Folio 25, Branded Tag
+Set 50) — verified by Frank, displayed on the listing and PDP, and enforced at
+checkout.
+
+## Product photography
+
+No real photos exist yet. `ProductImage`
+(`src/components/product/ProductImage.tsx`) renders the generated monogram
+artwork as a deliberate interim — nothing 404s or shows a broken-image icon.
+
+Adding real shots is a drop-in: put the file in `public/products/`, add an
+`images: [{ src, alt }]` entry to that product in `lib/products.ts`, and every
+call site picks it up. Per-finish shots are supported via an optional `finish`
+key on each image.
+
 ## Fonts
 
 Self-hosted, via `@fontsource-variable/*`, imported in `layout.tsx`. **No

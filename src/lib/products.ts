@@ -8,8 +8,15 @@
  *
  * Before launch, replace all of it with real values. In particular:
  *   - `priceKes` figures are placeholders, not real pricing
- *   - `details` entries are marked "to confirm" on purpose — fill them in
- *   - lead times and MOQs are guesses
+ *   - `description` lines describe the product *type* generically; they say
+ *     nothing about materials or construction, which are unconfirmed
+ *   - lead times are guesses
+ *
+ * CONFIRMED by Frank and safe to publish:
+ *   - `moq`: Executive Folio 25, Branded Tag Set 50
+ *
+ * Anything still unknown lives as a question in CONTENT_NEEDED (lib/draft.ts)
+ * and renders behind <Draft>, never to customers.
  *
  * Prices are stored once, here, in KES. The browser never sends a price to the
  * server; see priceOrder() in lib/orders.ts.
@@ -39,13 +46,22 @@ export type Product = {
   tagline: string;
   description: string;
   details: string[];
+  /**
+   * Real photography. Absent on every product today — ProductImage falls back
+   * to the generated monogram artwork until these exist. See
+   * components/product/ProductImage.tsx for how to add them.
+   */
+  images?: { src: string; alt: string; finish?: string }[];
   finishes: LeatherFinish[];
   /** Sizes for footwear and baby shoes; omitted for everything else. */
   sizes?: string[];
   /** Working days needed before dispatch. Drives the PDP delivery note. */
   leadTimeDays: number;
   featured?: boolean;
-  /** Minimum order quantity — only meaningful for corporate gifting SKUs. */
+  /**
+   * Minimum order quantity — corporate gifting SKUs only.
+   * Confirmed by Frank, so these are published and enforced at checkout.
+   */
   moq?: number;
 };
 
@@ -88,12 +104,16 @@ const ADULT_SIZES = ["39", "40", "41", "42", "43", "44", "45"];
 /** EU infant sizing. Confirm the real range before launch. */
 const BABY_SIZES = ["16", "17", "18", "19", "20", "21", "22"];
 
-/** Every `details` list ends up looking like this until real specs are supplied. */
-const TO_CONFIRM = [
-  "Leather type — to confirm",
-  "Construction — to confirm",
-  "Lining — to confirm",
-];
+/*
+ * `details` holds only CONFIRMED facts — currently just the size run.
+ *
+ * Leather type, construction, lining and dimensions were previously rendered
+ * as "— to confirm" lines, which meant customers read the words "to confirm"
+ * on every product page. Those questions now live in
+ * CONTENT_NEEDED.productSpecs (lib/draft.ts) and surface behind <Draft>, so
+ * they're visible to Frank and invisible to visitors. Add real spec lines
+ * here as they're confirmed.
+ */
 
 export const PRODUCTS: Product[] = [
   // ---------------------------------------------------------------- Footwear
@@ -104,8 +124,8 @@ export const PRODUCTS: Product[] = [
     priceKes: 12000,
     tagline: "Full brogue with a decorative wing across the toe.",
     description:
-      "A classic wingtip: the toe cap is cut in a W shape running back along both sides of the shoe, with punched broguing along the seams. Placeholder description — replace with the real make-up of this shoe.",
-    details: [...TO_CONFIRM, `Sizes ${ADULT_SIZES[0]}–${ADULT_SIZES.at(-1)}`],
+      "A classic wingtip: the toe cap is cut in a W shape running back along both sides of the shoe, with punched broguing along the seams.",
+    details: [`Sizes ${ADULT_SIZES[0]}–${ADULT_SIZES.at(-1)}`],
     finishes: [CHESTNUT, EBONY, SADDLE],
     sizes: ADULT_SIZES,
     leadTimeDays: 14,
@@ -118,8 +138,8 @@ export const PRODUCTS: Product[] = [
     priceKes: 11500,
     tagline: "A plain cap-toe with closed lacing.",
     description:
-      "The most formal shape in the range — a straight seam across the toe and closed lacing, where the eyelet facings are stitched under the vamp. Placeholder description.",
-    details: [...TO_CONFIRM, `Sizes ${ADULT_SIZES[0]}–${ADULT_SIZES.at(-1)}`],
+      "The most formal shape in the range — a straight seam across the toe and closed lacing, where the eyelet facings are stitched under the vamp.",
+    details: [`Sizes ${ADULT_SIZES[0]}–${ADULT_SIZES.at(-1)}`],
     finishes: [EBONY, CHESTNUT],
     sizes: ADULT_SIZES,
     leadTimeDays: 14,
@@ -132,8 +152,8 @@ export const PRODUCTS: Product[] = [
     priceKes: 15000,
     tagline: "Ankle boot with elasticated side panels, no laces.",
     description:
-      "Pulls on at the tab, with elastic gussets at both sides so the ankle stays close without lacing. Placeholder description.",
-    details: [...TO_CONFIRM, `Sizes ${ADULT_SIZES[0]}–${ADULT_SIZES.at(-1)}`],
+      "Pulls on at the tab, with elastic gussets at both sides so the ankle stays close without lacing.",
+    details: [`Sizes ${ADULT_SIZES[0]}–${ADULT_SIZES.at(-1)}`],
     finishes: [CHESTNUT, EBONY],
     sizes: ADULT_SIZES,
     leadTimeDays: 18,
@@ -145,8 +165,8 @@ export const PRODUCTS: Product[] = [
     priceKes: 6500,
     tagline: "Open sandal with a leather footbed.",
     description:
-      "Strapped open sandal on a leather footbed. Placeholder description — confirm strap count, sole material and construction.",
-    details: [...TO_CONFIRM, `Sizes ${ADULT_SIZES[0]}–${ADULT_SIZES.at(-1)}`],
+      "Strapped open sandal on a leather footbed.",
+    details: [`Sizes ${ADULT_SIZES[0]}–${ADULT_SIZES.at(-1)}`],
     finishes: [SADDLE, CHESTNUT, OLIVE],
     sizes: ADULT_SIZES,
     leadTimeDays: 10,
@@ -160,8 +180,8 @@ export const PRODUCTS: Product[] = [
     compareAtKes: 12500,
     tagline: "Open lacing, a little roomier than an oxford.",
     description:
-      "Eyelet facings sit on top of the vamp rather than under it, which opens the throat up and suits a higher instep. Placeholder description.",
-    details: [...TO_CONFIRM, `Sizes ${ADULT_SIZES[0]}–${ADULT_SIZES.at(-1)}`],
+      "Eyelet facings sit on top of the vamp rather than under it, which opens the throat up and suits a higher instep.",
+    details: [`Sizes ${ADULT_SIZES[0]}–${ADULT_SIZES.at(-1)}`],
     finishes: [CHESTNUT, SADDLE, EBONY],
     sizes: ADULT_SIZES,
     leadTimeDays: 14,
@@ -175,8 +195,8 @@ export const PRODUCTS: Product[] = [
     priceKes: 2500,
     tagline: "Soft-soled bootie for pre-walkers.",
     description:
-      "A soft, flexible bootie for babies not yet walking. Placeholder description — confirm sole, closure and lining.",
-    details: [...TO_CONFIRM, `EU sizes ${BABY_SIZES[0]}–${BABY_SIZES.at(-1)}`],
+      "A soft, flexible bootie for babies not yet walking.",
+    details: [`EU sizes ${BABY_SIZES[0]}–${BABY_SIZES.at(-1)}`],
     finishes: [SADDLE, CHESTNUT, SIENNA],
     sizes: BABY_SIZES,
     leadTimeDays: 7,
@@ -189,8 +209,8 @@ export const PRODUCTS: Product[] = [
     priceKes: 3200,
     tagline: "A firmer sole for first steps.",
     description:
-      "Built with more structure than the bootie, for babies starting to walk. Placeholder description.",
-    details: [...TO_CONFIRM, `EU sizes ${BABY_SIZES[0]}–${BABY_SIZES.at(-1)}`],
+      "Built with more structure than the bootie, for babies starting to walk.",
+    details: [`EU sizes ${BABY_SIZES[0]}–${BABY_SIZES.at(-1)}`],
     finishes: [CHESTNUT, EBONY, SADDLE],
     sizes: BABY_SIZES,
     leadTimeDays: 7,
@@ -204,8 +224,8 @@ export const PRODUCTS: Product[] = [
     priceKes: 9500,
     tagline: "Open-top tote for everyday carry.",
     description:
-      "An unstructured open-top tote. Placeholder description — confirm dimensions, lining and whether it fits a laptop.",
-    details: [...TO_CONFIRM, "Dimensions — to confirm"],
+      "An unstructured open-top tote.",
+    details: [],
     finishes: [SADDLE, CHESTNUT, OLIVE],
     leadTimeDays: 7,
   },
@@ -216,8 +236,8 @@ export const PRODUCTS: Product[] = [
     priceKes: 8800,
     tagline: "Flap-over satchel on an adjustable strap.",
     description:
-      "Flap-closing crossbody on an adjustable strap. Placeholder description — confirm closure type and internal layout.",
-    details: [...TO_CONFIRM, "Dimensions — to confirm"],
+      "Flap-closing crossbody on an adjustable strap.",
+    details: [],
     finishes: [CHESTNUT, EBONY],
     leadTimeDays: 7,
   },
@@ -229,9 +249,8 @@ export const PRODUCTS: Product[] = [
     category: "accessories",
     priceKes: 2800,
     tagline: "Leather belt with a metal buckle.",
-    description:
-      "Placeholder description — confirm width, ply, buckle finish and whether the buckle is replaceable.",
-    details: [...TO_CONFIRM, "Width — to confirm"],
+    description: "A leather belt fastening on a metal buckle.",
+    details: [],
     finishes: [CHESTNUT, EBONY, SADDLE],
     sizes: ["30", "32", "34", "36", "38", "40", "42"],
     leadTimeDays: 3,
@@ -243,8 +262,8 @@ export const PRODUCTS: Product[] = [
     priceKes: 2200,
     tagline: "Folding wallet with card slots and a note sleeve.",
     description:
-      "Placeholder description — confirm card slot count, note sleeve and stitching.",
-    details: [...TO_CONFIRM, "Card slots — to confirm"],
+      "A bifold wallet: folds once, with card slots inside and a full-width sleeve for notes.",
+    details: [],
     finishes: [EBONY, CHESTNUT, SIENNA],
     leadTimeDays: 3,
     featured: true,
@@ -258,8 +277,8 @@ export const PRODUCTS: Product[] = [
     priceKes: 6500,
     tagline: "A4 folio, brandable with your mark.",
     description:
-      "An A4 document folio intended to carry your branding. Placeholder description — confirm branding method, whether a pad is included, and packaging.",
-    details: [...TO_CONFIRM, "Branding method — to confirm"],
+      "An A4 document folio intended to carry your branding.",
+    details: [],
     finishes: [EBONY, CHESTNUT],
     leadTimeDays: 21,
     moq: 25,
@@ -271,8 +290,8 @@ export const PRODUCTS: Product[] = [
     priceKes: 1200,
     tagline: "Leather luggage tags, sold in sets.",
     description:
-      "Luggage tags supplied in sets and carrying your mark. Placeholder description — confirm set size, fixing and branding method.",
-    details: [...TO_CONFIRM, "Set size — to confirm"],
+      "Luggage tags supplied in sets and carrying your mark.",
+    details: [],
     finishes: [CHESTNUT, EBONY, SADDLE],
     leadTimeDays: 14,
     moq: 50,

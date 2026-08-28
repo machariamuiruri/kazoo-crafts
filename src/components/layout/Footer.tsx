@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { CATEGORIES } from "@/lib/products";
 import { LogoLockup } from "@/components/ui/Logo";
+import { Draft } from "@/components/ui/Draft";
 import {
   INSTAGRAM_HANDLE,
   WHATSAPP_DEFAULT_MESSAGE,
@@ -8,11 +9,18 @@ import {
   whatsappUrl,
 } from "@/lib/contact";
 
-const HELP = [
-  { href: "/craft", label: "About" },
-  { href: "/shop?category=corporate", label: "Corporate Gifting" },
-  { href: "/cart", label: "Your Bag" },
-];
+/*
+ * Footer IA: Shop / Company / Contact.
+ *
+ * Previously a "Help" column held About, Corporate Gifting and Your Bag. That
+ * was wrong three ways: the cart isn't help, Corporate Gifting already appears
+ * in the Shop column (it's a catalogue category) so it was listed twice, and
+ * "Help" implied support content that doesn't exist yet.
+ *
+ * Your Bag is dropped entirely — the header carries a persistent cart icon
+ * with a live count, so a footer link to it is redundant.
+ */
+const COMPANY = [{ href: "/craft", label: "About" }];
 
 export function Footer() {
   return (
@@ -26,17 +34,24 @@ export function Footer() {
               Handcrafted leather goods. Minimal, timeless, intentional. Made in
               Kenya.
             </p>
-            <div className="mt-6 space-y-2 text-sm">
-              <p>
-                <a
-                  href={`https://instagram.com/${INSTAGRAM_HANDLE}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-gold transition-colors"
-                >
-                  @{INSTAGRAM_HANDLE}
-                </a>
-              </p>
+            {/* Contact links live in the Contact column only — they were
+                previously repeated here too. */}
+          </div>
+
+          <FooterColumn
+            title="Shop"
+            links={CATEGORIES.map((c) => ({
+              href: `/shop?category=${c.id}`,
+              label: c.label,
+            }))}
+          />
+          <FooterColumn title="Company" links={COMPANY} />
+
+          <div>
+            <p className="eyebrow text-cream/50">Contact</p>
+            {/* Confirmed channels only. Address and hours are gated below —
+                a previous draft invented both. */}
+            <div className="mt-4 space-y-2.5 text-sm">
               <p>
                 <a
                   href={whatsappUrl(WHATSAPP_DEFAULT_MESSAGE)}
@@ -47,26 +62,24 @@ export function Footer() {
                   WhatsApp {WHATSAPP_DISPLAY}
                 </a>
               </p>
+              <p>
+                <a
+                  href={`https://instagram.com/${INSTAGRAM_HANDLE}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-gold transition-colors"
+                >
+                  @{INSTAGRAM_HANDLE}
+                </a>
+              </p>
             </div>
-          </div>
-
-          <FooterColumn
-            title="Shop"
-            links={CATEGORIES.map((c) => ({
-              href: `/shop?category=${c.id}`,
-              label: c.label,
-            }))}
-          />
-          <FooterColumn title="Help" links={HELP} />
-
-          <div>
-            <p className="eyebrow text-cream/50">Contact</p>
-            {/* PLACEHOLDER — a previous draft invented a workshop address and
-                opening hours. Replace with real contact details. */}
-            <address className="text-cream/50 mt-4 text-sm leading-relaxed italic">
-              Placeholder — add your real location, opening hours and contact
-              email here.
-            </address>
+            <div className="mt-5">
+              <Draft needs="footerContact" label="Address, hours, email">
+                <p className="text-ink-70 text-sm">
+                  Workshop location and opening hours.
+                </p>
+              </Draft>
+            </div>
           </div>
         </div>
 

@@ -3,9 +3,11 @@
 import { useEffect, useState } from "react";
 import type { Product } from "@/lib/products";
 import { useStore } from "@/lib/store";
-import { ProductArt } from "@/components/ui/ProductArt";
+import { ProductImage } from "@/components/product/ProductImage";
 import { Button } from "@/components/ui/Button";
 import { Price } from "@/components/ui/Price";
+import { Draft } from "@/components/ui/Draft";
+import { SizeGuide } from "@/components/product/SizeGuide";
 import { cn } from "@/lib/utils";
 
 /**
@@ -22,6 +24,7 @@ export function AddToCart({ product }: { product: Product }) {
   const [qty, setQty] = useState(product.moq ?? 1);
   const [justAdded, setJustAdded] = useState(false);
   const [sizeError, setSizeError] = useState(false);
+  const [sizeGuideOpen, setSizeGuideOpen] = useState(false);
 
   const needsSize = Boolean(product.sizes?.length);
 
@@ -51,7 +54,13 @@ export function AddToCart({ product }: { product: Product }) {
   return (
     <div className="grid gap-10 lg:grid-cols-2 lg:gap-16">
       <div className="bg-sand overflow-hidden rounded-sm">
-        <ProductArt finishHex={finish.hex} name={product.name} size="hero" />
+        <ProductImage
+          product={product}
+          finishHex={finish.hex}
+          finishName={finish.name}
+          size="hero"
+          priority
+        />
       </div>
 
       <div>
@@ -95,7 +104,16 @@ export function AddToCart({ product }: { product: Product }) {
         {/* Size */}
         {needsSize && (
           <fieldset className="mt-8">
-            <legend className="eyebrow text-ink-50">Size</legend>
+            <div className="flex items-baseline justify-between gap-4">
+              <legend className="eyebrow text-ink-50">Size</legend>
+              <button
+                type="button"
+                onClick={() => setSizeGuideOpen(true)}
+                className="text-leather hover:text-clay text-sm underline underline-offset-4 transition-colors"
+              >
+                How to measure
+              </button>
+            </div>
             <div className="mt-3 flex flex-wrap gap-2">
               {product.sizes!.map((option) => (
                 <button
@@ -122,6 +140,11 @@ export function AddToCart({ product }: { product: Product }) {
                 Choose a size to continue.
               </p>
             )}
+            <SizeGuide
+              open={sizeGuideOpen}
+              onClose={() => setSizeGuideOpen(false)}
+              isBaby={product.category === "baby"}
+            />
           </fieldset>
         )}
 
@@ -167,16 +190,29 @@ export function AddToCart({ product }: { product: Product }) {
           Made to order — ships in {product.leadTimeDays} working days.
         </p>
 
-        <ul className="border-sand text-ink-70 mt-8 space-y-2 border-t pt-8 text-sm">
-          {product.details.map((detail) => (
-            <li key={detail} className="flex gap-3">
-              <span className="text-gold" aria-hidden="true">
-                —
-              </span>
-              {detail}
-            </li>
-          ))}
-        </ul>
+        {/* Only confirmed spec lines render. Leather type, construction and
+            lining are still unknown and sit behind <Draft> below rather than
+            appearing as "— to confirm" rows a customer would read. */}
+        {product.details.length > 0 && (
+          <ul className="border-sand text-ink-70 mt-8 space-y-2 border-t pt-8 text-sm">
+            {product.details.map((detail) => (
+              <li key={detail} className="flex gap-3">
+                <span className="text-gold" aria-hidden="true">
+                  —
+                </span>
+                {detail}
+              </li>
+            ))}
+          </ul>
+        )}
+
+        <div className="mt-8">
+          <Draft needs="productSpecs" label={`Specifications — ${product.name}`}>
+            <p className="text-ink-70 text-sm">
+              Leather, construction, lining and dimensions.
+            </p>
+          </Draft>
+        </div>
       </div>
     </div>
   );
