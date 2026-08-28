@@ -1,6 +1,12 @@
 import Link from "next/link";
 import { CATEGORIES } from "@/lib/products";
 import { LogoLockup } from "@/components/ui/Logo";
+import {
+  INSTAGRAM_HANDLE,
+  WHATSAPP_DEFAULT_MESSAGE,
+  WHATSAPP_DISPLAY,
+  whatsappUrl,
+} from "@/lib/contact";
 
 const HELP = [
   { href: "/craft", label: "About" },
@@ -20,16 +26,28 @@ export function Footer() {
               Handcrafted leather goods. Minimal, timeless, intentional. Made in
               Kenya.
             </p>
-            <p className="mt-6 text-sm">
-              <a
-                href="https://instagram.com/26_kazoocraft.ke"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:text-gold transition-colors"
-              >
-                @26_kazoocraft.ke
-              </a>
-            </p>
+            <div className="mt-6 space-y-2 text-sm">
+              <p>
+                <a
+                  href={`https://instagram.com/${INSTAGRAM_HANDLE}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-gold transition-colors"
+                >
+                  @{INSTAGRAM_HANDLE}
+                </a>
+              </p>
+              <p>
+                <a
+                  href={whatsappUrl(WHATSAPP_DEFAULT_MESSAGE)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-gold transition-colors"
+                >
+                  WhatsApp {WHATSAPP_DISPLAY}
+                </a>
+              </p>
+            </div>
           </div>
 
           <FooterColumn

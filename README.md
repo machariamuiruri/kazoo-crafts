@@ -76,6 +76,26 @@ utilities — `--color-leather` gives you `bg-leather`, `text-leather`,
 
 Add a colour there rather than dropping an arbitrary hex into a component.
 
+## Contact / WhatsApp
+
+The number lives in one place, `src/lib/contact.ts`. It's stored in
+international form (`254714085668`) because `wa.me` rejects anything with a
+`+`, spaces, or a leading zero — `0714 085 668` won't work as a link.
+
+The floating button pre-fills a message written in the *customer's* voice, and
+varies it by page: a product page names the product, so you don't have to ask
+what they're looking at. The Instagram bio says "DM to order", so this is a
+real ordering channel rather than a support afterthought.
+
+It's hidden on `/checkout`: the pay button is full-width, and at some scroll
+positions on a 375px viewport the floating button covered ~31px of it, so a
+mis-tap opened WhatsApp instead of paying. The footer link is on every page.
+
+> **Gotcha:** don't run `next build` while `next dev` is running. Both use
+> `.next/`, so the build overwrites the dev server's chunks and every page
+> silently stops hydrating — it still renders, but nothing is interactive.
+> Stop the dev server first, or `rm -rf .next` and restart it afterwards.
+
 ## Brand assets
 
 The mark is a cream monogram **K** on a leather-brown patch, with a gold
