@@ -76,6 +76,24 @@ utilities — `--color-leather` gives you `bg-leather`, `text-leather`,
 
 Add a colour there rather than dropping an arbitrary hex into a component.
 
+## Fonts
+
+Self-hosted, via `@fontsource-variable/*`, imported in `layout.tsx`. **No
+third-party font requests** — verified zero external hosts at runtime.
+
+This matters beyond performance: hotlinking Google Fonts sends every visitor's
+IP to Google, which German courts have ruled a GDPR breach. This storefront
+sells into the EU, so that was a real exposure rather than a theoretical one.
+It also let `style-src` and `font-src` in the CSP tighten to `'self'`.
+
+Variable faces cover every weight in one file each (Playfair 400–900, Jakarta
+200–800), and `unicode-range` subsetting means a visitor downloads only Latin:
+**65 KB total** (38 KB + 27 KB) for the whole type system.
+
+The family names are `"Playfair Display Variable"` and `"Plus Jakarta Sans
+Variable"` — the `Variable` suffix is what `@fontsource-variable` registers.
+Drop it and the CSS silently falls through to Georgia / system-ui.
+
 ## Contact / WhatsApp
 
 The number lives in one place, `src/lib/contact.ts`. It's stored in

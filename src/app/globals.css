@@ -21,12 +21,12 @@
   --color-ink-70: #4a4644;
   --color-ink-50: #7a7472;
 
-  /* Typography.
-     Loaded via <link> in layout.tsx rather than next/font: next/font fetches
-     from Google at build time, which turns a network blip into a failed build.
-     A stylesheet link just falls back to Georgia / system-ui instead. */
-  --font-serif: "Playfair Display", Georgia, serif;
-  --font-sans: "Plus Jakarta Sans", system-ui, sans-serif;
+  /* Typography. Self-hosted variable fonts, imported in layout.tsx — no
+     third-party requests, so no visitor IP reaches Google. The "Variable"
+     suffix is the family name @fontsource-variable registers; without it the
+     rules silently fall through to the fallbacks below. */
+  --font-serif: "Playfair Display Variable", Georgia, serif;
+  --font-sans: "Plus Jakarta Sans Variable", system-ui, sans-serif;
 
   /* Motion */
   --ease-craft: cubic-bezier(0.22, 1, 0.36, 1);

@@ -1,4 +1,11 @@
 import type { Metadata } from "next";
+// Self-hosted variable fonts. These ship from our own domain, so no visitor IP
+// reaches Google — hotlinking Google Fonts has been ruled a GDPR breach in the
+// EU, and this storefront sells into the EU. Variable faces cover every weight
+// we use (Playfair 400–900, Jakarta 200–800) in one file each, and the
+// unicode-range subsetting means only Latin is actually downloaded.
+import "@fontsource-variable/playfair-display";
+import "@fontsource-variable/plus-jakarta-sans";
 import "./globals.css";
 import { StoreProvider } from "@/lib/store";
 import { Header } from "@/components/layout/Header";
@@ -25,18 +32,6 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin="anonymous"
-        />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
-          rel="stylesheet"
-        />
-      </head>
       <body className="flex min-h-screen flex-col">
         <StoreProvider>
           <Header />

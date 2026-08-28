@@ -14,14 +14,14 @@ const isDev = process.env.NODE_ENV === "development";
  * 2. `'unsafe-eval'` in development only — the dev overlay and Fast Refresh
  *    need it. It is not emitted in production builds.
  *
- * `style-src` allows Google Fonts because the font stylesheet is loaded via
- * <link> in layout.tsx. Self-hosting the fonts would let us drop that origin.
+ * Fonts are self-hosted (see layout.tsx), so no third-party origins are
+ * allowed here at all — style-src and font-src are both 'self'.
  */
 const csp = [
   "default-src 'self'",
   `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""}`,
-  "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-  "font-src 'self' https://fonts.gstatic.com",
+  "style-src 'self' 'unsafe-inline'",
+  "font-src 'self'",
   "img-src 'self' data: blob:",
   // Dev needs the websocket for Fast Refresh.
   `connect-src 'self'${isDev ? " ws: wss:" : ""}`,
