@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="Kazoo Crafts">
+  <title>Kazoo Crafts</title>
+  <!-- Leather patch -->
+  <rect width="64" height="64" rx="13" fill="#6B3A19"/>
+  <!-- Saddle-stitch seam. Decorative only: dropped below 32px in favicon.ico,
+       where a 1.6px dashed line renders as noise rather than detail. -->
+  <line x1="9.5" y1="14" x2="9.5" y2="50" stroke="#D4AF37" stroke-width="1.6"
+        stroke-dasharray="3.2 3.4" stroke-linecap="round" opacity="0.9"/>
+  <!-- Monogram K, drawn as geometry rather than type so the mark carries no
+       font dependency and rasterises identically at every size. Arm and leg
+       spring from one vertex on the stem's right edge — offsetting them makes
+       the junction read as a blob instead of a letter. -->
+  <g fill="none" stroke="#F9F6F0" stroke-linecap="butt">
+    <line x1="22" y1="17" x2="22" y2="47" stroke-width="7"/>
+    <line x1="25.5" y1="32" x2="43" y2="17" stroke-width="6"/>
+    <line x1="25.5" y1="32" x2="44.5" y2="47" stroke-width="6.5"/>
+  </g>
+</svg>

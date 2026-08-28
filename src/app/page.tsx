@@ -70,16 +70,20 @@ function Hero() {
         </div>
 
         {/* Generated artwork standing in for real photography. */}
+        {/* min-w-0 on the columns is load-bearing: grid children default to
+            min-width:auto, so the quote's longest word ("Intentional.") sets a
+            min-content width that pushes the track past the viewport on mobile
+            and causes horizontal scroll. */}
         <div className="grid grid-cols-2 gap-4">
-          <div className="bg-sand overflow-hidden rounded-sm">
+          <div className="bg-sand min-w-0 overflow-hidden rounded-sm">
             <ProductArt finishHex="#6B3A19" name="Wingtip Brogue" />
           </div>
-          <div className="mt-10 grid gap-4">
-            <div className="bg-sand overflow-hidden rounded-sm">
+          <div className="mt-10 grid min-w-0 gap-4">
+            <div className="bg-sand min-w-0 overflow-hidden rounded-sm">
               <ProductArt finishHex="#B87333" name="Leather Sandal" />
             </div>
-            <div className="bg-ink text-cream flex flex-col justify-center rounded-sm p-6">
-              <p className="font-serif text-2xl leading-snug">
+            <div className="bg-ink text-cream flex min-w-0 flex-col justify-center rounded-sm p-6">
+              <p className="font-serif text-2xl leading-snug break-words">
                 Minimal. Timeless. Intentional.
               </p>
               <p className="text-cream/60 mt-3 text-xs tracking-wide uppercase">

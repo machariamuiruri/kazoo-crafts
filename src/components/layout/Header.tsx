@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { CATEGORIES } from "@/lib/products";
 import { CURRENCIES } from "@/lib/currency";
 import { useStore } from "@/lib/store";
+import { LogoLockup } from "@/components/ui/Logo";
 import { cn } from "@/lib/utils";
 
 const NAV = [
@@ -39,9 +40,8 @@ export function Header() {
             <MenuIcon open={menuOpen} />
           </button>
 
-          <Link href="/" className="font-serif text-lg tracking-[0.2em] uppercase">
-            Kazoo
-            <span className="text-leather">.</span>
+          <Link href="/" aria-label="Kazoo Crafts — home">
+            <LogoLockup />
           </Link>
 
           <nav className="hidden items-center gap-8 lg:flex">

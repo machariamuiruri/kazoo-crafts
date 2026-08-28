@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { CATEGORIES } from "@/lib/products";
+import { LogoLockup } from "@/components/ui/Logo";
 
 const HELP = [
   { href: "/craft", label: "About" },
@@ -13,9 +14,7 @@ export function Footer() {
       <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="grid gap-12 md:grid-cols-[1.4fr_1fr_1fr_1.2fr]">
           <div>
-            <p className="text-cream font-serif text-xl tracking-[0.2em] uppercase">
-              Kazoo<span className="text-gold">.</span>
-            </p>
+            <LogoLockup onDark showTagline />
             {/* Taken from the brand's own Instagram bio — not invented. */}
             <p className="mt-4 max-w-xs text-sm leading-relaxed">
               Handcrafted leather goods. Minimal, timeless, intentional. Made in

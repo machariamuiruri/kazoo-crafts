@@ -76,6 +76,38 @@ utilities — `--color-leather` gives you `bg-leather`, `text-leather`,
 
 Add a colour there rather than dropping an arbitrary hex into a component.
 
+## Brand assets
+
+The mark is a cream monogram **K** on a leather-brown patch, with a gold
+saddle-stitch seam down the left edge.
+
+The K is drawn as **geometry, not type** — no font dependency, and it
+rasterises identically at every size. That geometry is duplicated in three
+places, so changing one means changing all three:
+
+| File | Role |
+| --- | --- |
+| `src/components/ui/Logo.tsx` | `LogoMark` / `LogoLockup` used in the header and footer |
+| `public/logo-mark.svg` | Standalone master, for external use |
+| `src/app/icon.svg` | Favicon source; Next wires the `<link>` automatically |
+
+Raster icons are generated from that same geometry. After changing the mark,
+regenerate rather than hand-editing the PNGs:
+
+```bash
+python3 scripts/render-icons.py    # requires Pillow
+```
+
+`favicon.ico` is written as a raw ICO container rather than through Pillow's
+ICO writer, because Pillow derives every frame by downscaling a single source
+image and silently drops sizes larger than it. Writing the container directly
+allows genuinely different artwork per size: **the stitch detail is omitted
+below 32px**, where a 1.6px dashed line renders as noise rather than detail.
+
+Icons produced: `favicon.ico` (16/24/32/48/64), `apple-icon.png` (180, opaque —
+iOS composites onto white and would otherwise show white corners),
+`icon-192.png` and `icon-512.png` for the web manifest.
+
 ## Payments
 
 Copy `.env.example` to `.env.local` and fill it in. **Both payment methods
