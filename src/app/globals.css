@@ -1,0 +1,96 @@
+@import "tailwindcss";
+
+/*
+ * Kazoo Crafts design tokens.
+ *
+ * Declared inside @theme so Tailwind v4 generates matching utilities:
+ * --color-leather gives bg-leather / text-leather / border-leather, and so on.
+ * Add a colour here rather than reaching for an arbitrary hex in a component.
+ */
+@theme {
+  /* Palette */
+  --color-ink: #1a1816;
+  --color-leather: #6b3a19;
+  --color-clay: #a0522d;
+  --color-cream: #f9f6f0;
+  --color-surface: #ffffff;
+  --color-gold: #d4af37;
+  --color-sand: #e2dccf;
+
+  /* Muted ink shades, for body copy that shouldn't compete with headings */
+  --color-ink-70: #4a4644;
+  --color-ink-50: #7a7472;
+
+  /* Typography.
+     Loaded via <link> in layout.tsx rather than next/font: next/font fetches
+     from Google at build time, which turns a network blip into a failed build.
+     A stylesheet link just falls back to Georgia / system-ui instead. */
+  --font-serif: "Playfair Display", Georgia, serif;
+  --font-sans: "Plus Jakarta Sans", system-ui, sans-serif;
+
+  /* Motion */
+  --ease-craft: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--color-cream);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-serif);
+    font-weight: 500;
+    letter-spacing: -0.015em;
+  }
+
+  /* Keyboard focus should be obvious against both cream and ink surfaces. */
+  :focus-visible {
+    outline: 2px solid var(--color-clay);
+    outline-offset: 3px;
+  }
+}
+
+@layer utilities {
+  /* Small caps label used above section headings throughout the site. */
+  .eyebrow {
+    font-size: 0.6875rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+
+  /* Generated product artwork — a leather-grain gradient standing in for
+     photography. Driven by --finish so each colourway renders differently. */
+  .leather-swatch {
+    background-image:
+      radial-gradient(
+        ellipse at 30% 25%,
+        rgb(255 255 255 / 0.18),
+        transparent 55%
+      ),
+      radial-gradient(ellipse at 75% 80%, rgb(0 0 0 / 0.28), transparent 60%),
+      linear-gradient(145deg, var(--finish), color-mix(in srgb, var(--finish) 70%, #000));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
